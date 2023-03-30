@@ -1,0 +1,80 @@
+BEGIN:VCALENDAR
+METHOD:REQUEST
+PRODID:Microsoft Exchange Server 2010
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:Tokyo Standard Time
+BEGIN:STANDARD
+DTSTART:16010101T000000
+TZOFFSETFROM:+0900
+TZOFFSETTO:+0900
+END:STANDARD
+BEGIN:DAYLIGHT
+DTSTART:16010101T000000
+TZOFFSETFROM:+0900
+TZOFFSETTO:+0900
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+ORGANIZER;CN=Carlos Pignataro (cpignata):mailto:cpignata@cisco.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Carlos Pig
+ nataro:mailto:cpignata@gmail.com
+DESCRIPTION;LANGUAGE=en-US:\n\n\n-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+ -~-\n-- Do not delete or change any of the following text. --\n\nWhen it's
+  time\, join your Webex meeting here.\n\n\nMeeting number (access code): 2
+ 570 117 8418\nMeeting password: SZmFsJ83Kf4 (79637583 from phones)\n\n\nJo
+ in meeting<https://cisco.webex.com/cisco/j.php?MTID=m9d32f08aa36f5018dbc80
+ 2394d358a26>\n\nTap to join from a mobile device (attendees only)\n+1-408-
+ 525-6800\,\,25701178418#79637583#<tel:%2B1-408-525-6800\,\,*01*25701178418
+ %2379637583%23*01*> Call-in toll number (US/Canada)\nSome mobile devices m
+ ay ask attendees to enter a numeric password.\n\nJoin by phone\n+1-408-525
+ -6800 Call-in toll number (US/Canada)\nGlobal call-in numbers<https://cisc
+ o.webex.com/cisco/globalcallin.php?MTID=maf9083a8eb960d09885fb0f2a18020fd>
+ \n\nJoin from a video system or application\nDial 25701178418@webex.com<si
+ p:25701178418@webex.com>\nYou can also dial 173.243.2.68 and enter your me
+ eting number.\n\n\nIf you are a host\, click here<https://cisco.webex.com/
+ webappng/sites/cisco/meeting/info/24b178dcb81c4cd588f894e99a3268a7> and lo
+ gin site to view host information.\n\n\nNeed help? Go to http://help.webex
+ .com\n\n\n
+UID:040000008200E00074C5B7101A82E00800000000847C87359657D901000000000000000
+ 0100000000D45D9FF80497E43BD5BAC0C17C5F0FE
+SUMMARY;LANGUAGE=en-US:IETF 116 “Environmental Impacts” Side Meeting
+DTSTART;TZID=Tokyo Standard Time:20230330T130000
+DTEND;TZID=Tokyo Standard Time:20230330T143000
+CLASS:PUBLIC
+PRIORITY:5
+DTSTAMP:20230315T234023Z
+TRANSP:OPAQUE
+STATUS:CONFIRMED
+SEQUENCE:0
+LOCATION;LANGUAGE=en-US:https://cisco.webex.com/cisco/j.php?MTID=m9d32f08aa
+ 36f5018dbc802394d358a26
+X-MICROSOFT-CDO-APPT-SEQUENCE:0
+X-MICROSOFT-CDO-OWNERAPPTID:2121499012
+X-MICROSOFT-CDO-BUSYSTATUS:TENTATIVE
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MICROSOFT-CDO-ALLDAYEVENT:FALSE
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INSTTYPE:0
+X-MICROSOFT-ONLINEMEETINGEXTERNALLINK:
+X-MICROSOFT-ONLINEMEETINGCONFLINK:
+X-MICROSOFT-DONOTFORWARDMEETING:FALSE
+X-MICROSOFT-DISALLOW-COUNTER:FALSE
+X-MICROSOFT-LOCATIONDISPLAYNAME:https://cisco.webex.com/cisco/j.php?MTID=m9
+ d32f08aa36f5018dbc802394d358a26
+X-MICROSOFT-LOCATIONSOURCE:Resource
+X-MICROSOFT-LOCATIONURI:https://cisco.webex.com/cisco/j.php?MTID=m9d32f08aa
+ 36f5018dbc802394d358a26
+X-MICROSOFT-LOCATIONS:[{"DisplayName":"https://cisco.webex.com/cisco/j.php?
+ MTID=m9d32f08aa36f5018dbc802394d358a26"\,"LocationAnnotation":""\,"Locatio
+ nSource":5\,"LocationUri":"https://cisco.webex.com/cisco/j.php?MTID=m9d32f
+ 08aa36f5018dbc802394d358a26"\,"LocationStreet":""\,"LocationCity":""\,"Loc
+ ationState":""\,"LocationCountry":""\,"LocationPostalCode":""\,"LocationFu
+ llAddress":""}]
+BEGIN:VALARM
+DESCRIPTION:REMINDER
+TRIGGER;RELATED=START:-PT15M
+ACTION:DISPLAY
+END:VALARM
+END:VEVENT
+END:VCALENDAR
