@@ -1,4 +1,4 @@
-## Agenda:
+## Slides:
 
 Intro: (20 mins)
 
