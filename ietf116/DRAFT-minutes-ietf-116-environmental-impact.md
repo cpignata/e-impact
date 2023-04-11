@@ -229,6 +229,8 @@ Detailed low-power networks:
 Protocols and mechanisms, and working groups and technologies.
 Technology enables, power awareness on routing protocols from 2011 
 
+> Comments from Lars:
+Excellent Presentation, useful.
 
 
 <a id="part-3-outro-and-next-steps"></a>
