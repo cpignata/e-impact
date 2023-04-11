@@ -1,8 +1,8 @@
 # e-impact
 Environmental Impact of Internet Architectures and Technologies
 
-* [e-impact List info](https://www.ietf.org/mailman/listinfo/e-impact)
-* [e-impact ListArchive](https://mailarchive.ietf.org/arch/browse/e-impact/)
+* [e-impact List Info](https://www.ietf.org/mailman/listinfo/e-impact)
+* [e-impact List Archive](https://mailarchive.ietf.org/arch/browse/e-impact/)
 
 ## IETF 116
 * [“Environmental Impact” Side Meeting](ietf116/IETF116-Side-Meeting.md)
