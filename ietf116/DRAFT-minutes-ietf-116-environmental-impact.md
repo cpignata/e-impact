@@ -42,6 +42,7 @@ After checking that the in-room mic/speakers worked with Webex and remote attend
 
 Agenda: [Agenda](https://github.com/cpignata/e-impact/blob/main/ietf116/Agenda.md)
 
+Key focus will be in the next-step discussion.
 
 <a id="part-1-introduction"></a>
 ## Part 1. Introduction
@@ -53,18 +54,8 @@ Goals for the side meeting:
 continuation of the work from the IAB Environmental Impact workshop (December 22), and most importantly, 
 discuss potential mechanics for continuation, what's next from here.
 
-> Comments from John Klensin:
-Leaving aside general passion for the world, define sustainability and the objectives for IETF.
-
-> Comments from Eve M Schooler:
-Move from volunteering to required, in the sense that IETF will be ready and prepared, once the regulatory requirement is there.
-
-> Some other comments:  
-offsetting: needs further analysis  
-IETF needs to keep getting better at hybrid events  
-how to be more efficient in Participation  
-travel: reducing in-person meetings?
-
+> Comments:
+> Great approach.
 
 <a id="e-impact-iab-workshop-summary-%E2%80%93-jari-arkko"></a>
 ### E-Impact IAB Workshop Summary – Jari Arkko
@@ -167,7 +158,9 @@ Accuracy considerations ... ranges vs absolute values.
 <a id="sustainability-insights-%E2%80%93-draft-almprs-sustainability-insights-%E2%80%93-marisol-palmero"></a>
 ### Sustainability Insights – draft-almprs-sustainability-insights – Marisol Palmero
 
-Marisol presented.
+Marisol presentation included:
+
+Sustainability Insights serves as a foundation for building an industry-wide, open-source framework for the reduction of greenhouse gas emissions, enabling measurement and optimization of  the overall impact on the environment of networking devices, software applications, services, and solutions across the lifecycle journey.
 
 > Comments from Eve (learning experience forums), we need to also go beyond IETF. 
 Forums that Eve thinks would be interesting to investigate would be: (1) the Open Group's OFP (Open Footprint Forum) that aims to standardize the carbon footprint data model, and CNCF's OCP (Open Compute Project) that is more focused on data centers but still has interesting participation and output.
@@ -285,7 +278,7 @@ Work on a charter. Start the work.
 
 
 <a id="wrap--next-steps-%E2%80%93-carlos-pignataro"></a>
-### Wrap & Next Steps – Carlos Pignataro 
+### Wrap & Next Steps – Carlos Pignataro
 
 Summary of what has been said:
 * Focus on what we can control, on phased approach. 
