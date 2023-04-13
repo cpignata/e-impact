@@ -9,4 +9,5 @@ Environmental Impact of Internet Architectures and Technologies
 * [Agenda](ietf116/Agenda.md)
 * [Slides](ietf116/slides/README.md)
 * [Internet-Drafts](ietf116/ids/)
+* [Minutes](ietf116/Minutes-ietf-116-environmental-impact.md)
 
