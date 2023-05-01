@@ -1,5 +1,3 @@
-## *** DRAFT ***
-
 # IETF116 “Environmental Impact” Side Meeting
 
 ## Table of Contents
