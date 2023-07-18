@@ -1,4 +1,4 @@
-# IETF 117 &mdash; "Environmental Impacts" Side Meeting
+# IETF 117 &mdash; _"Sustainable Networking"_ Side Meeting
 
 ## Agenda:
 
