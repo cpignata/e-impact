@@ -1,0 +1,840 @@
+
+
+
+
+Network Working Group                                       P. Andersson
+Internet-Draft                                               J. Lindblad
+Intended status: Informational                               S. Mitrovic
+Expires: 14 September 2023                                    M. Palmero
+                                                                E. Roure
+                                                            G. Salgueiro
+                                                           Cisco Systems
+                                                           13 March 2023
+
+
+                        Sustainability Insights
+                draft-almprs-sustainability-insights-00
+
+Abstract
+
+   This document motivates the collection and aggregation of
+   sustainability environmental related metrics.  It describes the
+   motivation and requirements to collect asset centric metrics
+   including but not limited to power consumption and energy efficiency,
+   circular economy properties, and more general metrics useful in
+   environmental impact analysis.  It provides foundations for building
+   an industry-wide, open-source framework for the reduction of
+   greenhouse gas emissions, enabling measurement and optimization of
+   the overall impact on the environment of networking devices, software
+   applications, services, and solutions across the lifecycle journey.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 14 September 2023.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 1]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  The Sustainability Telemetry Standard Specification . . .   4
+     1.2.  Requirements language . . . . . . . . . . . . . . . . . .   7
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   3.  Motivation  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+   4.  Next Steps  . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     4.1.  The Sustainability Framework  . . . . . . . . . . . . . .   8
+     4.2.  Further Development . . . . . . . . . . . . . . . . . . .   9
+   5.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     5.1.  Use Case I  . . . . . . . . . . . . . . . . . . . . . . .   9
+       5.1.1.  Scenario  . . . . . . . . . . . . . . . . . . . . . .   9
+       5.1.2.  Sustainability Insights Added Value . . . . . . . . .  10
+     5.2.  Use Case II . . . . . . . . . . . . . . . . . . . . . . .  10
+       5.2.1.  Scenario  . . . . . . . . . . . . . . . . . . . . . .  10
+       5.2.2.  Sustainability Insights Added Value . . . . . . . . .  10
+     5.3.  Use Case III  . . . . . . . . . . . . . . . . . . . . . .  10
+       5.3.1.  Scenario  . . . . . . . . . . . . . . . . . . . . . .  10
+       5.3.2.  Sustainability Insights Added Value . . . . . . . . .  11
+     5.4.  Use Case IV . . . . . . . . . . . . . . . . . . . . . . .  11
+       5.4.1.  Scenario  . . . . . . . . . . . . . . . . . . . . . .  11
+       5.4.2.  Sustainability Insights Added Value . . . . . . . . .  11
+     5.5.  Use Case V  . . . . . . . . . . . . . . . . . . . . . . .  11
+       5.5.1.  Scenario  . . . . . . . . . . . . . . . . . . . . . .  11
+       5.5.2.  Sustainability Insights Added Value . . . . . . . . .  12
+   6.  Deployment Considerations . . . . . . . . . . . . . . . . . .  12
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+   8.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     8.1.  Normative References  . . . . . . . . . . . . . . . . . .  13
+     8.2.  Informative References  . . . . . . . . . . . . . . . . .  14
+   Change log  . . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
+
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 2]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+1.  Introduction
+
+   To answer questions about how sustainable equipment and operational
+   practices are, various key performance indicators (KPIs) produced by
+   network devices, management systems, and networking solutions are
+   necessary.  While such KPIs are abundantly produced and collected
+   today there are quite a few issues with their usability and
+   commonality.  Without a common definition of metrics across the
+   industry and widespread adoption, we will be left with ill-defined,
+   potentially redundant, and proprietary metrics.
+
+   An aspect lacking today is the precise definitions of the collected
+   metrics.  This leads to KPIs that are not comparable to each other,
+   as it is unknown what is included in the outcomes and what is not.
+   It makes it challenging to sum or compare numbers from different
+   manufacturers and organizations without investing in data
+   normalization and a high number of assumptions.
+
+   To produce aggregate data, it is also important to consider how the
+   component inputs are combined.  Different vendors and operators might
+   do this aggregation differently, yet again producing values that are
+   hard to combine or compare when also using different units of
+   measurement.  In many cases, one might suspect the actual numbers are
+   underestimated, since there is competitive pressure to produce small
+   numbers to report on the environmental impact of Internet
+   communications and applications in contrast with the benefit of using
+   it.  The aim shall not be to "produce the numbers" but to find
+   quantitative measures, when possible, that give a fair assessment of
+   Sustainability related metrics vs. useful work.
+
+   It may be tempting to define the useful work in networking equipment
+   as simply as the number of bits that are passing through the device.
+   For some types of equipment, that might be appropriate, but clearly a
+   video system that is sending a video stream with better video
+   compression is not necessarily less sustaiable just because it sends
+   fewer bits per Joule.  There are also many kinds of networking
+   equipment where measuring the end user value in number of passed bits
+   is obviously ridiculous, and other metrics have to be defined.
+   Monitoring or management systems are examples of this.
+
+   Another important and key aspect, when referring to environmental
+   impact metrics is what needs to be considered as part of the
+   lifecycle.  Life cycle assessment, also known as LCA, of networks and
+   services, is defined by ISO 14040 as the compilation and evaluation
+   of the inputs, outputs, and potential environmental impacts
+   throughout its lifecycle.
+
+   LCA is based on four main phases:
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 3]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   *  Goal and Scope
+
+   *  Inventory Analysis
+
+   *  Impact Assessment
+
+   *  Interpretation
+
+   This document is setting up the stage to identify data quality
+   requirements, under the information and communications technology
+   (ICT) category.  Following product Lifecycle Accounting (LCA), this
+   document focuses on using the five product lifecycle stages defined
+   by the GHG Protocol Accounting and Reporting Standard, which is in
+   accordance with the ISO 14040:44 standards:
+
+   1.  Use
+
+   2.  Manufacturing
+
+   3.  Material Acquisition / Processing
+
+   4.  Transport
+
+   5.  End of Life
+
+   Impact and interpretation will be briefly covered under the
+   document's motivation and use cases sections.
+
+   There is reason to suspect that nebulous definitions combined with
+   the competitive pressure might produce greenwashing.  Greenwashing
+   involves making an unsubstantiated claim to deceive consumers into
+   believing that a vendor's product or solution is environmentally
+   friendly or has a greater positive environmental impact than it does.
+   This document proposes the following initiative to counter these
+   effects.
+
+1.1.  The Sustainability Telemetry Standard Specification
+
+   As an industry, we need to cooperate and agree on a set of core KPIs
+   that are measured, including the definition of terms, units, and
+   measurement procedures.  What is included, and what is not included.
+
+   Sustainability metrics require a broad diversity of data sources that
+   need to be combined.
+
+   *  Static information.  Data coming from manufacturing, including
+      reference values on how the assets have been designed if they
+      enable reuse and recycling, and which materials have been used
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 4]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+      during manufacturing and packaging; normally this information is
+      defined once and it is part of data sheets provided by the
+      vendors.
+
+   *  Dynamic data.  Information measured in real-time or close to real-
+      time from the networking equipment or application.  For instance,
+      metrics should consider current inventory and current source and
+      amount of consumed power, as well as what hardware and software
+      features are enabled and used by the specific network equipment.
+
+   *  Best practices.  Recommendations for optimizing the use of the
+      network equipment, throughout its complete lifecycle.
+
+   *  Local context.  Country-specific regulations, corporate policy,
+      and social aspects.
+
+   To enable the exchange of sustainability data among all interested
+   parties, deployment considerations that are out of the scope of this
+   document will need to include:
+
+   *  Data models.  The model definition can be implemented in different
+      forms.  This document proposes YANG as part of the Specification
+      Data Model.  YANG can be used independently of the transport and
+      can be converted into any encoding format supported by the network
+      configuration protocol.  YANG models are decoupled from the
+      management protocol layer.
+
+   *  Sustainability framework.  To drive adoption, we propose an open-
+      source aggregation framework for sustainability data.  This
+      framework should be seen as a reference architecture for a
+      sustainability monitoring mechanism.  While each implementation
+      may be (and will be) different, the basic framework shall remain
+      constant.  The framework must account for vendor-specific
+      calculations and enhacements in a plug-in architecture.
+
+   YANG data models as part of the Sustainability Telemetry
+   Specification, which will follow this document, have been classified
+   as follows:
+
+   *  Identification of the assets.  Assets include hardware (physical
+      as well as virtual), software, applications, and services.  The
+      asset concept is defined in the Data Model for Lifecycle
+      Management and Operations (DMLMO)
+      [I-D.draft-palmero-opsawg-dmlmo-09] IETF draft.
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 5]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   *  Power and Efficiency.  To measure power consumption and energy
+      efficiency, common methods, attributes, and units are needed to
+      define metrics.  The approach needs to cover the different
+      networking domains, starting with hardware focus, but including
+      software and protocols attributes and metrics.
+
+   *  Circular Economy attributes.  Collecting circularity data (such as
+      materials used, or the embedded emissions footprint) is expensive
+      and difficult because of confidentiality and the non-standardized
+      approach to reporting and exchanging circularity data.  The flow
+      of circularity data is typically lost at each step throughout the
+      supply chain, as goods are passed through suppliers,
+      manufacturers, system integrators, distributors, customers, and
+      consumers into reuse and recycling.
+
+   *  Context metrics.  Without understanding the context of the use,
+      none of the metrics listed above will provide much value.  The
+      carbon intensity of the power used, for example, is key to
+      assessing the sustainability of a given application.  An
+      efficiency number needs to be interpreted differently at peak
+      hours and night.  A given user may be considered less sustainable
+      if someone demonstrates the ability to deliver the same end-user
+      value to a smaller footprint.  A system that is transported a
+      shorter distance or using a more sustainable mode of
+      transportation from the factory to the installation site may also
+      be assessed more positively.  Or if it has a longer economic life
+      or comes with less single-use packaging.
+
+   The model definition can be implemented in different forms.  We would
+   like to propose a specific YANG model for the sustainability metrics,
+   which intrinsically allows for a variety of collection protocols.
+   YANG can be used independently of the transport protocol, and lends
+   itself well to be converted into a variety of encoding formats
+   supported by popular network configuration protocols.
+
+   The rest of this document is organized as follows.  Section 2
+   establishes the terminology and abbreviations.  Section 3 outlines
+   the goals and motivation of Sustainability metrics.  Section 4
+   discusses Use Cases that lay out the groundwork for the
+   Sustainability Telemetry Specification, to address new business needs
+   introduced by the Circular Economy and to avoid excessive climate
+   change.
+
+
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 6]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+1.2.  Requirements language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+2.  Terminology
+
+   Terminology and abbreviations used in this document:
+
+   Asset  Hardware, software, applications, or services.  An asset can
+      be physical or virtual.
+
+   Greenwashing  Marketing (intentionally or not) an asset as being
+      green (i.e. fitting well into the circular economy) by selectively
+      omitting less green aspects of the asset.
+
+   Circular economy  An economic paradigm in which the full lifecycle
+      cost of resource use and emissions are included.
+
+   Climate change  The disruption of ecological processes caused by
+      excessive resource use or emissions.
+
+3.  Motivation
+
+   Aside from the need for consistency on metrics to be considered as
+   part of the ICT sector, to reduce environmental impact and increase
+   benefit; this document and future work related, aim to support the
+   Digital Product Passport initiative under the European Union's (EU's)
+   Circular Economy Action Plan (CEAP) and the Ecodesign for Sustainable
+   Products Regulation (ESPR).  There is not much time for businesses to
+   prepare and for IETF work to influence this development.
+
+   The Digital Product Passport (DPP) is key to the EU's transition to a
+   circular economy and will provide information about assets'
+   environmental sustainability.  It aims to improve traceability and
+   transparency along the entire value chain of an asset and to improve
+   the management and sharing of product-related data which are critical
+   to ensuring their sustainable use, prolonged life, and circularity.
+
+   There is a need to:
+
+   *  Track raw materials extraction/production, supporting due
+      diligence efforts
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 7]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   *  Enable manufacturers to increase transparency in the value chain,
+      better compliance, increased circularity, and sustainability
+
+   *  Enabling services related to its remanufacturing, reparability,
+      second-life, and recyclability, enabling sustainable business
+      models.
+
+   In the case of upgrading, repairing, repurposing, or remanufacturing
+   a product, it should be clear the responsibility to update the
+   information is transferred to the installer, repairer, or
+   remanufacturer who will be putting the product into service or
+   placing it on the EU market.
+
+   The three main target groups of the passport are:
+
+   *  Public authorities and policymakers: reliable information on
+      compliance of products with EU legislation
+
+   *  Economic operators (such as recyclers): information on proper
+      dismantling and waste treatment of products; the presence of
+      Substances of Very High Concern (SVHCs) through a link to the SCIP
+      database; etc.
+
+   *  Consumers: instructions for use, information on repair centers,
+      sorting instructions, and other information as required by
+      existing EU legislation (e.g.  CLP regulations), more information
+      about products would be made available to consumers and customers
+      to enable informed choices.
+
+   The DPP will help business planners and consumers make informed
+   choices when purchasing assets, and should also help local and public
+   authorities to better perform checks and controls.
+
+4.  Next Steps
+
+   To enable the exchange of sustainability data among all interested
+   parties at each step of the value supply chain, a technical
+   sustainability framework for how this data is queried, transported,
+   and visualized will be required.
+
+4.1.  The Sustainability Framework
+
+   To drive quick adoption, we propose to build an open-source
+   aggregation framework for sustainability data.  This framework should
+   be seen as a reference architecture for a sustainability monitoring
+   mechanism.  The reference implementation will be based on the IETF
+   standards mentioned before.  The architecture would supply a few base
+   components, but otherwise, allow vendors or standards bodies to
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 8]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   plugin their applications that fit in the general framework.  One
+   example of such an application that we would like to propose is a
+   model to calculate the Total Sustainability Cost of Ownership (TSCO)
+   for network solutions based on the Environmental, Social, and
+   Governance (ESG) Materiality Matrix.  This matrix model is open to
+   adding any implementation that takes into consideration
+   Sustainability objectives at a point in time, but it also evolves
+   with the needs of the business and the stakeholders.  The initial
+   scope proposes to investigate the top four most important ESG
+   Materiality issues as a base to grow the TCO to a TSCO that matches
+   the Company's priorities and issues.
+
+4.2.  Further Development
+
+   Items that are not in the scope of this edition of this document, but
+   could be addressed in future revisions, include:
+
+   *  How to relate Sustainability Telemetry Specification to
+      sustainability Scopes 1, 2, and 3,
+
+   *  Circular Economy Business models,
+
+   *  Recommendations,
+
+   *  Scope 4, i.e. metrics for avoided footprints (sometimes called
+      handprint).  For instance, to reduce GHG emissions, automation
+      activities like Zero Touch, or certain technologies like Routed
+      Optical Networking, can replace other higher emitting activities.
+      Another example would be the positive impact arising from video
+      conferencing as opposed to international travel by airplane.
+
+5.  Use Cases
+
+5.1.  Use Case I
+
+5.1.1.  Scenario
+
+   An organization is running a large and complex network with many
+   types of devices.  By looking at the utility bills, it is clear that
+   the organization is consuming rather more energy per transported bit
+   than many other organizations.  Exactly which devices or network
+   functions are at the root of the situation is unclear, however.
+
+   The product LCA in this scenario applies to the stage of "Use".
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023               [Page 9]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+5.1.2.  Sustainability Insights Added Value
+
+   By providing near-real-time data that is broken down at least to an
+   individual hardware device, and ideally considerably deeper than
+   that, it will be possible to attribute energy and environmental
+   footprint costs to different device types, service types, and
+   individual customers.
+
+   If one customer is altering its behavior or load on the network, a
+   monitoring application could detect this quickly.  It would also be
+   possible to try several implementations or configurations for a given
+   service and get quick feedback on the operations cost of that change.
+
+5.2.  Use Case II
+
+5.2.1.  Scenario
+
+   An organization is running a network with a variety of managed
+   services and applications.  Some of the devices are getting old, and
+   have lower energy efficiency than more modern devices.  Replacing old
+   devices with new ones might improve efficiency, but has an economical
+   as well as environmental cost.  Without specific performance data, it
+   is difficult to make informed decisions about upgrades.
+
+   The product LCA stage applies to "Use".
+
+5.2.2.  Sustainability Insights Added Value
+
+   By providing KPIs for reading sustainability parameters that pertain
+   to actual usage, rather than numbers from data sheets, the accuracy
+   of upgrade decisions is enhanced.  Such data can make the case for an
+   upgrade very clear and easy to make, or it may show that it's not a
+   good idea at this time.  In both cases improving the sustainability
+   of the operations.
+
+5.3.  Use Case III
+
+5.3.1.  Scenario
+
+   Recycling and reuse are major drivers of the circular economy.
+   Companies must put high efforts in this direction and transparency.
+   This is a qualitative KPI, passed if percentages of recycled and
+   reused goods given the manufacturing options, as well as reports
+   listing how many units have been recycled.
+
+   The product LCA applies to the stage of "Material Acquisition /
+   Processing".
+
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 10]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+5.3.2.  Sustainability Insights Added Value
+
+   The trend seems to be to report on the percentage of recycled user
+   devices and the eco-design and refurbishment efforts.  Sustainability
+   Insights can enable the data sources to report comprehensive
+   reporting of recycling efforts.
+
+5.4.  Use Case IV
+
+5.4.1.  Scenario
+
+   An organization is running a network with a variety of managed
+   services and applications.  The network and application performance
+   is continuously monitored, and there are even some automatic
+   remediation actions that may trigger when certain conditions are
+   detected.
+
+   In this scenario, the product LCA applies to the stage of "Use".
+
+5.4.2.  Sustainability Insights Added Value
+
+   By providing KPIs for sustainability parameters such as power
+   consumption and power efficiency, the monitoring system can access
+   relevant data and perform actions that reduce the power consumption
+   or sustainability footprint of the delivered services.
+
+   For example, some overly redundant links or systems may be powered
+   off at night, or enter into a low-power mode.  A highly available
+   application may be configured to take more load in the data center
+   with a lower price of energy, lower outside temperatures, or an
+   environmentally superior energy mix.
+
+5.5.  Use Case V
+
+5.5.1.  Scenario
+
+   IT solutions are currently analyzed from two main perspectives:
+   technological and economical.  When looking at environmental, social,
+   and corporate governance (ESG) impact topics, sustainability metrics
+   in the context of digital transformation, deliver insights into
+   opportunities and risks that emerge from a rapidly growing
+   stakeholder demand for sustainable, digitally advanced products and
+   services.
+
+   The product LCA applies to all stages under the product LCA.
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 11]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+5.5.2.  Sustainability Insights Added Value
+
+   From an application point of view, this use case proposes to include
+   Sustainability factors in the Total Cost of Ownership (TCO)
+   calculation, where there is a need to add Environmental, Social, and
+   Governmental Key Performance Indicators (KPIs) to the analysis.
+   However, adding Sustainability metrics comes with challenges and
+   trades-off.  Future work considers a model to calculate the Total
+   Sustainability Cost of Ownership (TSCO) for network solutions based
+   on the ESG Materiality Matrix.  This model is open to adding any
+   implementation that takes into consideration Sustainability
+   objectives at a point in time, but it also evolves with the needs of
+   the business and the stakeholders.  The initial scope proposes to
+   investigate the top four most important ESG Materiality issues as a
+   base to grow the TCO to a TSCO that matches the Company's priorities
+   and issues.
+
+   Future work might include use cases that will cover "Manufacturing",
+   "Transport" and "End of Life" examples.
+
+6.  Deployment Considerations
+
+   Sustainability Data Models defines the data schemas for
+   Sustainability Insights data.  Sustainability Insights Data Models
+   are based on YANG.  YANG data models can be used independently of the
+   transport protocols and can be converted into any encoding format
+   supported by the network configuration protocol.  YANG is protocol
+   independent.
+
+   To enable the exchange of Sustainability Insights data among all
+   interested parties, deployment considerations that are out of the
+   scope of this document will need to include:
+
+   *  The data model definition
+
+   *  The data structure to describe all metrics and quantify relevant
+      data consistently, i.e. specific formats like XML or JSON encoded
+      messages would be deemed valid or invalid based on Sustainability
+      Insights models.
+
+   *  The process to share and collect Sustainability Insights data
+      across the consumers consistently, including the transport
+      mechanism.  The Sustainability Insights YANG models can be used
+      with network management protocols such as NETCONF [RFC6241],
+      RESTCONF [RFC8040], streaming telemetry, etc.  OpenAPI
+      specifications might also help to consume Sustainability Insights
+      metrics.
+
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 12]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   *  How the configuration of assets to implement Sustainability
+      Insights telemetry should be done.
+
+   It will be important to consider where, when, and how often the data
+   will need to be collected.  As per the specification of the data,
+   data might need to be collected from different data sources: network
+   devices, and different databases where manufacturing information is
+   stored and maintained.  Ideally all this information can be extracted
+   via a well-defined API.  The frequency to collect the data will also
+   vary, for instance, comparing manufacturing data with runtime data.
+   For example, it might be a good practice to collect inventory data
+   once per day, while "environmental" data might need to be updated
+   hourly or even more frequently.  It will also be important to
+   consider the platform from where data might be collected, and the
+   need to properly correlate all the information.
+
+7.  Security Considerations
+
+   The security considerations mentioned in section 17 of [RFC7950]
+   apply.
+
+   Sustainability Insights brings several security and privacy
+   implications because of the various components and attributes of the
+   information model.  For example, each functional component can be
+   tampered with to give manipulated data.  Sustainability Insights when
+   used alone or with other relevant data, can identify an individual,
+   revealing Personal Identifiable Information (PII).  Misconfigurations
+   can lead to data being accessed by unauthorized entities.
+
+   Methods exist to secure the communication of management information.
+   The transport entity of the functional model MUST implement methods
+   for secure transport.  This document also contains an Information
+   model and Data-Model in which none of the objects defined are
+   writable.  If the objects are deemed sensitive in a particular
+   environment, access to them MUST be restricted using appropriately
+   configured security and access control rights.  The information model
+   contains several optional elements which can be enabled or disabled
+   for the sake of privacy and security.  Proper authentication and
+   audit trail MUST be included for all the users/processes that access
+   Sustainability Insights Telemetry Data.
+
+8.  References
+
+8.1.  Normative References
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 13]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+8.2.  Informative References
+
+   [I-D.draft-palmero-opsawg-dmlmo-09]
+              Palmero, M., Brockners, F., Kumar, S., Bhandari, S.,
+              Cardona, C., and D. Lopez, "Data Model for Lifecycle
+              Management and Operations", Work in Progress, Internet-
+              Draft, draft-palmero-opsawg-dmlmo-09, 17 January 2023,
+              <https://datatracker.ietf.org/doc/html/draft-palmero-
+              opsawg-dmlmo-09>.
+
+   [RFC6241]  Enns, R., Ed., Bjorklund, M., Ed., Schoenwaelder, J., Ed.,
+              and A. Bierman, Ed., "Network Configuration Protocol
+              (NETCONF)", RFC 6241, DOI 10.17487/RFC6241, June 2011,
+              <https://www.rfc-editor.org/info/rfc6241>.
+
+   [RFC7950]  Bjorklund, M., Ed., "The YANG 1.1 Data Modeling Language",
+              RFC 7950, DOI 10.17487/RFC7950, August 2016,
+              <https://www.rfc-editor.org/info/rfc7950>.
+
+   [RFC8040]  Bierman, A., Bjorklund, M., and K. Watsen, "RESTCONF
+              Protocol", RFC 8040, DOI 10.17487/RFC8040, January 2017,
+              <https://www.rfc-editor.org/info/rfc8040>.
+
+Change log
+
+   RFC Editor Note: This section is to be removed during the final
+   publication of the document.
+
+   version 00
+
+   *  Initial version of the draft.
+
+Acknowledgments
+
+   This document was created by meaningful contributions from Jeff
+   Apcar, Klaus Verschure and Suresh Krishnan.
+
+   The authors wish to thank them and many others for their helpful
+   comments and suggestions.
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 14]
+
+Internet-Draft           Sustainability Insights              March 2023
+
+
+Authors' Addresses
+
+   Per Andersson
+   Cisco Systems
+   Email: perander@cisco.com
+
+
+   Jan Lindblad
+   Cisco Systems
+   Email: jlindbla@cisco.com
+
+
+   Snezana Mitrovic
+   Cisco Systems
+   Email: snmitrov@cisco.com
+
+
+   Marisol Palmero
+   Cisco Systems
+   Email: mpalmero@cisco.com
+
+
+   Esther Roure
+   Cisco Systems
+   Email: erourevi@cisco.com
+
+
+   Gonzalo Salgueiro
+   Cisco Systems
+   Email: gsalguei@cisco.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Andersson, et al.       Expires 14 September 2023              [Page 15]
