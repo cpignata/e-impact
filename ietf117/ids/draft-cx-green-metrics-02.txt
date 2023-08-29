@@ -1,0 +1,1064 @@
+
+
+
+
+Network Working Group                                           A. Clemm
+Internet-Draft                                                   L. Dong
+Intended status: Informational                                 Futurewei
+Expires: 9 September 2023                                      G. Mirsky
+                                                                Ericsson
+                                                            L. Ciavaglia
+                                                                   Nokia
+                                                             J. Tantsura
+                                                               Microsoft
+                                                              M-P. Odini
+                                                            8 March 2023
+
+
+                        Green Networking Metrics
+                       draft-cx-green-metrics-02
+
+Abstract
+
+   This document explains the need for network instrumentation that
+   allows to assess the power consumption, energy efficiency, and carbon
+   footprint associated with a network, its equipment, and the services
+   that are provided over it.  It also suggests a set of related metrics
+   that, when provided visibility into, can help to optimize a network's
+   energy efficiency and "greenness".
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 9 September 2023.
+
+Copyright Notice
+
+   Copyright (c) 2023 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 1]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Definitions and Acronyms  . . . . . . . . . . . . . . . . . .   4
+   3.  Green Metrics . . . . . . . . . . . . . . . . . . . . . . . .   5
+     3.1.  Metrics related to Equipment  . . . . . . . . . . . . . .   5
+       3.1.1.  Energy Consumption Metrics  . . . . . . . . . . . . .   5
+       3.1.2.  Green Metrics Beyond Energy Consumption . . . . . . .   8
+       3.1.3.  Virtualization Considerations . . . . . . . . . . . .   9
+     3.2.  Green Metrics related to Flows  . . . . . . . . . . . . .  10
+     3.3.  Energy Metrics related to Paths . . . . . . . . . . . . .  11
+     3.4.  Energy Metrics related to the Network-at-Large  . . . . .  12
+   4.  Other considerations  . . . . . . . . . . . . . . . . . . . .  13
+     4.1.  User perspective  . . . . . . . . . . . . . . . . . . . .  13
+     4.2.  Holistic perspective  . . . . . . . . . . . . . . . . . .  13
+     4.3.  Sustainable equipment production  . . . . . . . . . . . .  14
+     4.4.  Dealing with imprecision and uncertainty  . . . . . . . .  15
+     4.5.  Certification . . . . . . . . . . . . . . . . . . . . . .  15
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
+   7.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  16
+   8.  Informative References  . . . . . . . . . . . . . . . . . . .  16
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
+
+1.  Introduction
+
+   Climate change and the need to curb greenhouse emissions have been
+   recognized by the United Nations and by most governments as one of
+   the big challenges of our time.  As a result, reducing carbon
+   footprint is becoming of increasing importance for society and for
+   many industries.  The networking industry is no exception.
+
+   Networks themselves consume significant amounts of energy and thus
+   contribute to greenhouse emissions.  Therefore, the networking
+   industry has an important role to play in meeting sustainability
+   goals.  Future networking advances will increasingly need to focus on
+   becoming more sustainable and reducing carbon footprint, both for
+   economic reasons and for reasons of corporate responsibility.  Those
+   advances will focus first and foremost on greater energy efficiency,
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 2]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   but not be limited to that.  Other factors include consideration for
+   how power is being sourced (e.g. carbon versus solar based),
+   considerations for the lifecycle of hardware (e.g. software versus
+   forklift upgrades), and considerations related to deployments (for
+   example, minimizing the "energy tax" associated with heating or
+   cooling of networking devices).  This shift has already begun and
+   sustainability is well on its way towards becoming an important
+   concern for network providers [telefonica2021].
+
+   There are many vectors along which networks can be made "greener".
+   At its foundation, it involves network equipment itself.  Making such
+   equipment more energy-efficient is a big factor in helping networks
+   become greener.  However, opportunities also exist at the level of
+   protocols themselves (e.g. reduction of transmission waste and
+   enabling of rapid control loops), at the level of the overall network
+   (e.g. path optimization under consideration of energy efficiency as a
+   cost factor), and architecture level (e.g. placement of contents and
+   functions) [I.D.draft-cwx-green-ps].
+
+   However, regardless of any particular approach that is chosen, in
+   order to assess its impact, there is a need to have visibility into
+   the actual energy consumption that is occurring and to ideally be
+   able to attribute that consumption to its sources.  As the adage
+   goes, you cannot manage what you cannot measure.  By extension, you
+   cannot optimize what you have no visibility of.  The ability to
+   instrument networks in a way that allows for the assessment of energy
+   consumption is hence an important enabler for potential energy
+   optimizations, allowing to assess the effectiveness of measures that
+   are being taken and enabling (for example) control loops that involve
+   energy as an input.  Before instrumenting, it needs to be clear,
+   however, what the proper metrics are that network providers will be
+   interested in and that applications will seek to optimize.
+
+   This document defines a set of metrics that allow to assess the
+   "greenness" of networks and that form the basis for optimizing energy
+   efficiency, carbon footprint, and environmental sustainability of
+   networks and the services provided.  These metrics are intended to
+   serve the foundation for possible later IETF standardization
+   activities, such as the definition of related YANG modules [RFC7950]
+   or energy-related control protocol extensions.  It should be noted
+   that the metrics introduced here are not intended to be used to
+   manage applications such as Power over Ethernet, requirements and
+   instrumentation for which have been defined in other contexts (e.g.
+   [RFC6988][RFC7460]).
+
+   Please note that throughout this document, we will be using the terms
+   "green", "sustainable", and "carbon footprint reduction"
+   interchangeably.  Ultimately, the goal is to reduce (and as far as
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 3]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   possible avoid) the emission of greenhouse gases.  Emission of
+   greenhouse gases is generally caused by methods to generate energy
+   that is used to power devices (as well as production process for the
+   manufacturing of networking equipment or to heat, cool, light
+   buildings that house networking equipment).  Within this context, we
+   will focus for the most part on energy efficiency and use that term
+   synonymously with "energy utilization efficiency", broadly speaking
+   referring to the efficiency with which energy is being utilized.
+   Energy efficiency contributes to reducing greenhouse gas emission by
+   minimizing the amount of required energy, not all of which might be
+   sourced sustainably.  Other contributing factors include for example
+   the greenness of the energy source (such as solar versus fossil-
+   based).
+
+2.  Definitions and Acronyms
+
+      Carbon footprint: as used in this document, the amount of carbon
+      emissions associated with the use or deployment of technology,
+      usually directly correlated with the associated energy consumption
+
+      CPU: Central Processing Unit
+
+      IPFIX: IP Flow Information eXport
+
+      MTU: Maximum Transmission Unit
+
+      PSF: Power Sustainability Factor (PSF), a factor used to weigh
+      power consumption against the cleanliness of the underlying power
+      source
+
+      SDN: Software-Defined Networking
+
+      ST: Sustainability Tax, a factor applied to "raw" power
+      consumption metrics in order to account for factors such as the
+      sustainability of power sources in order to arrive a number that
+      reflects more closely the "true" contribution to carbon footprint.
+
+      TCAM: Ternary Content-Addressable Memory
+
+      VM: Virtual Machine
+
+      VNF: Virtual Network Function
+
+      Wh: Watt hour
+
+      pWh: pico Watt hour
+
+      kWh: kilo Watt hour
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 4]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+3.  Green Metrics
+
+   In the following, we categorize green metrics as follows:
+
+   *  At the device/equipment level.  This concerns aspects such as
+      energy consumption of a device as a whole, of equipment components
+      such as line cards or individual ports.  It includes metrics that
+      would, for example, be found in equipment data sheets.
+
+   *  At the flow level.  This concerns aspects of carbon footprint that
+      can be attributed to flows.  For example, this includes metrics
+      that attribute a device's share of its carbon footprint to the
+      flow, or metrics that aggregate energy consumption of packets
+      across the flow.
+
+   *  At the path level.  These metrics attest to the end-to-end carbon
+      footprint of paths, reflecting for example the amount of energy
+      drawn when the path is selected and taking into account the energy
+      efficiency and sustainability ratings of path segments.
+
+   *  At the network level.  These metrics aggregate sustainability
+      metrics across a network to provide a holistic picture of the
+      "network as a system".  For example, this includes energy consumed
+      by the network as a whole and account also for aspects such as the
+      overall energy mix.
+
+   The green metrics that are defined are mostly comprised of energy
+   metrics, as required to assess and optimize various aspects of energy
+   efficiency.  However, those energy metrics are complemented by
+   certain other metrics, for example metrics that account for the
+   sustainability of the energy source (where known), in turn allowing
+   to (for example) define derived metrics that discount metrics that
+   are based on measuring energy consumption by greenness factors.
+
+3.1.  Metrics related to Equipment
+
+3.1.1.  Energy Consumption Metrics
+
+   Arguably the most relevant green metrics relate to equipment.  After
+   all, power is drawn from devices.
+
+
+
+
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 5]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   The power consumption of the device can be divided into the
+   consumption of the core components (e.g., the backplane and CPU) as
+   well as additional consumption incurred per port and line card.  In
+   [I.D.draft-manral-bmwg-power-usage], the device factors affecting
+   power consumption are summarized: base chassis power, number of line
+   cards, number of active ports, port settings, port utilization,
+   implementation of packet classification of Ternary Content-
+   Addressable Memory (TCAM) and the size of TCAM, firmware version.
+
+   Furthermore it is important to understand the difference between
+   power consumption when a resource is idling versus when it is under
+   load.  This helps to understand the incremental cost of additional
+   transmission versus the initial cost of transmission.  Generally, the
+   cost of the first bit could be considered very high, as it requires
+   powering up a device, port, etc.  The cost of transmission of
+   additional bits (beyond the first) is many orders of magnitude lower.
+   Likewise, the incremental cost of CPU and memory that will be needed
+   to process additional packets becomes fairly negligible.
+
+   The first set of metrics corresponds to energy ratings of the device:
+
+   *  Power consumption when idle (e.g.  Watts)
+
+   *  Power consumption when fully loaded (e.g.  Watts)
+
+   *  Power consumption at various loads: e.g. power consumption at 50%
+      utilization, power consumption at 90% utilization
+
+   These metrics should be maintained for the device as a whole, and for
+   the subcomponents, i.e.:
+
+   *  For the chassis by itself
+
+   *  For each line card
+
+   *  For each port
+
+   They should also take into account aspects such as the current memory
+   configuration, as the overall energy consumption of a device is a
+   function of the energy consumption of the components that make up the
+   system.
+
+   The metrics could be provided by the data sheet associated with the
+   device or they could be measured as part of a deployment.  For
+   maximum accuracy and comparability, they should reflect pre-defined
+   environmental setting, e.g., operating temperature, relative
+   humidity, barometric pressure.  For example, ATIS (Alliance for
+   Telecommunications Industry Solutions) [ATIS0600015.02] defines a
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 6]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   reference environment under which to measure router power
+   consumption: temperature of 25 celsius degree (within 3 celsius
+   degree deviation), relative humidity of 30% to 75%, barometric
+   pressure between 1020 and 812 mbar.  In the AC power configuration,
+   the router should be evaluated at 230 VAC or within 1% deviation, 50
+   or 60 Hz or within 1% deviation [Ahn2014].
+
+   Please note that such metrics should ideally be certified.  (See also
+   Section Section 4.5.)
+
+   The second set of metrics reflects the actual power being drawn
+   during operation.  It is the type of data that might be provided as
+   management data.  Again, it should be provided for the device as a
+   whole, as well as for the subcomponents reflected in the device
+   hierarchy: line cards, ports, etc.
+
+   *  Current power consumption (e.g.  Watts)
+
+   *  Power drawn since system start (or module insertion, if at the
+      level of a line card, or port activation, if at the level of a
+      port), for the past minute (e.g.  Watt hours)
+
+   The third set of metrics are derived from the earlier metrics.  They
+   normalize the power consumption relative to the line speeds
+   respectively amount of traffic that is being passed.
+
+   *  Current power consumption / kB (or gB)
+
+   *  Current power consumption / packet
+
+   The fourth set of metrics reflects expectation values about
+   incremental energy usage.  It could be relevant for use cases that
+   assess the cost of additional traffic.  [Bolla2011] and [Ahn2014]
+   found that the power consumption of a router is in direct proportion
+   of the link utilization as well as the packet sizes.  [Petrescu2010]
+   suggests using MTU-sized packets as a reference for energy usage.
+   (This is contrary to the earlier metric of current power consumption
+   per packet, which references the count of actual packets being
+   passed.)
+
+   *  Incremental power per MTU-sized packet (possible units might be pJ
+      - pico Joules)
+
+   *  Incremental power per gB
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 7]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+3.1.2.  Green Metrics Beyond Energy Consumption
+
+   In addition to consumption metrics, it is conceivable to also have
+   the device reflect other context of relevance.  An important aspect
+   concerns the device's power source.  In most cases, devices will be
+   agnostic to the power source and depend on the specific deployment.
+   Nonetheless, for a holistic picture, it makes sense to have the
+   "greenness" of the device power source reflected.  This can occur,
+   for example, via a sustainability rating of the power source.  This
+   sustainability rating might reflect sustainability on a scale ranging
+   from diesel-generator powered, powered via conventional power grid,
+   to powered via renewable energy (powered by windmill, capture of
+   excess heat, etc.).  It may be possible to obtain such a rating from
+   the energy operator and (if not attributable to a single source)
+   reflect the operator's mix of energy sources.  In some cases the
+   sustainability rating might vary with time: over long periods, as a
+   network operator's energy mix becomes more sustainable, as well as
+   over short periods, for example in the case of solar-powered devices
+   backed up by energy drawn from the grid.
+
+   Also, the environmental context of the device could be taken into
+   consideration, such as whether it is deployed in a data center and
+   its share in contributing to the need for cooling.  It is conceivable
+   to, for example, introduce corresponding metrics that attribute a
+   share of the general power consumption of the network as a whole to
+   the device, including of the environment that the device is deployed
+   in (such as power drawn by the building that houses the device) - an
+   "energy tax" to be attributed to the device, so to speak.  In
+   combination with a factor associated with a device's power
+   sustainability rating, this can result in an overall "pollution
+   factor" that allows to better assess the true contribution that a
+   device is making on carbon footprint.  Weighing energy use by a
+   pollution factor, resulting in pollution-aware networking, has been
+   proposed in the literature as a more appropriate approach to
+   sustainable networks than mere energy-aware networking [Hossain2019].
+
+   Accordingly, as metrics, the following are being proposed:
+
+   *  Power Sustainability Rating
+
+   *  Power Sustainability Factor (PSF)
+
+   *  Deployment Sustainability Factor
+
+   *  Sustainability Tax (ST)
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 8]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   It is conceivable to use PSF and ST to weigh other energy consumption
+   metrics in order to better express actual carbon contribution.
+   Corresponding metrics are easy to derive by applying PSF and/or ST as
+   a multiplication factor to the energy consumption metric.  Doing so
+   will result in metrics such as the following:
+
+   *  Current Sustainability-Weighed Power Consumption
+
+   *  Current Sustainability-Weighed Power Consumption / gB
+
+   *  Incremental Sustainability-Weighed Power Consumption / MTU-sized
+      packet
+
+   *  etc.
+
+   As an option, it is conceivable to convert these metrics into
+   approximate CO2 emission metrics using some formula to calculate the
+   CO2-equivalent required to generate sustainability-weighed power.
+   (It should be noted that CO2 is of course not the only greenhouse
+   gas, but the one that is broadly recognized.)
+
+3.1.3.  Virtualization Considerations
+
+   Instrumentation should also take into account the possibility of
+   virtualization.  This is important in particular as networking
+   functions may increasingly be virtualized and hosted (for example) in
+   a data center.  Overlay networks may be formed.  Likewise, many
+   applications expected to optimize energy consumption may be hosted on
+   controllers and applied to soft switches, VNFs (Virtual Network
+   Functions), or networking slices.  The attribution of actual power
+   consumed to such virtualized entities is a non-trivial task.  It
+   involves navigating layers of indirection to assess actual energy
+   usage and contribution by individual entities.  While it would be
+   possible in such cases to simply revert to energy metrics of CPUs and
+   data centers as a whole, this loses the ability to account for those
+   metrics on the basis of networking decisions being made.
+
+   For example, virtualized networking functions could be hosted on
+   containers or virtual machines which are hosted on a CPU in a data
+   center instead of a regular network appliance such as a router or a
+   switch, leading to very different power consumption characteristics.
+   A data center CPU could be more power efficient and consume power
+   more proportionally to actual CPU load.  Virtualization could result
+   in using fewer servers.  [Energystar] reports that one watt-hour of
+   energy savings at the server level results in roughly 1.9 watt-hours
+   of facility-level energy savings by reducing energy waste in the
+   power infrastructure and reducing energy needed to cool the waste
+   heat produced by the server.  Of course, there are other tradeoffs to
+
+
+
+Clemm, et al.           Expires 9 September 2023                [Page 9]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   consider.  For example, hosting certain functions at the edge instead
+   of the core may result in nominally higher carbon footprint when
+   viewed purely from the hosting infrastructure perspective.  However,
+   it may decrease a network's carbon footprint overall due to a
+   reduction in long-distance traffic.
+
+   Instrumentation needs to reflect the reality that virtualization can
+   occur and facilitate attributing power consumption in a correct
+   manner.  Ideally, the previously defined green metrics should be
+   transposed into equivalent virtual energy metrics.  The
+   instrumentation of virtual energy metrics involves the attribution of
+   energy consumption and carbon footprint of real-world hosting
+   infrastructure to individual virtual functions that run on top of
+   that infrastructure.  Doing so accurately may involve challenges.
+   However, equivalent capabilities have been defined before in the
+   context of cloud services running in data centers.  In that context,
+   metrics have been proposed that attribute power usage to Virtual
+   Machines (VM) and allow to distinguish furthermore between idle VMs
+   (to determine waste), and all VMs (allowing to determine the ratio of
+   overall power consumed that is truly wasted) [vmWare2022].  As an
+   alternative, a simpler solution may be to simply forgo energy metrics
+   for virtualized functions entirely, instead focus on instrumenting
+   and relying on optimizing the energy footprint of the underlying
+   hosting infrastructure.
+
+3.2.  Green Metrics related to Flows
+
+   Green metrics related to flows attempt to capture the contribution of
+   a given flow to carbon footprint.  In its basic incarnation, those
+   metrics reflect the energy consumption at a given device.  They could
+   be used in conjunction with IPFIX [RFC7011] and modeled as
+   Information Elements to be treated analogous to other flow statistics
+   [RFC7012].  The following is a corresponding set of flow energy
+   metrics at a device:
+
+   *  Incremental energy consumed over the duration of the flow.
+
+      This is the incremental energy consumption that is directly caused
+      by the flow, representing the difference between the amount of
+      energy consumed with the flow and the amount of energy that would
+      have been consumed without the flow.  (It should be noted that
+      this metric may be difficult to assess in practice.)
+
+   *  Amortized energy consumed over the duration of the flow.
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 10]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+      This is the portion of the flow's energy consumption for the
+      duration of the flow, effectively computed by computing the
+      proportion of flow traffic to overall traffic and multiplying it
+      with the total energy consumption incurred by the device for that
+      time.
+
+   A second set of metrics related to flow might aggregate the flow's
+   impact on carbon footprint over the entire flow path.  In that case,
+   flow metrics observed at individual systems are added up along the
+   systems of the traversed path.  However, in practice, this will be
+   much more difficult to assess with reasonable accuracy for many
+   reasons.  These reasons include the impact of load balancing, PREOF
+   (Packet Replication, Elimination, and Ordering Functions [RFC8655])
+   which may lead to replicated packets for certain segments of a path
+   which still need to be attributed to the flow.  The same is true for
+   packet loss, as lost packets may also contribute to the energy
+   equation.  The carbon contribution of those packets until they were
+   dropped as well as their retransmission still needs to be attributed
+   to their respective flow.  A third challenge concerns the ability to
+   trace actual routes taken by production traffic.  On top of that,
+   there is the issue that other systems are involved at lower layers
+   whose contribution to carbon footprint may not be accounted for.  For
+   these reasons, any metrics that are provided will need to come with
+   corresponding disclaimers as applicable.
+
+   Analogous to equipment metrics, metrics related to energy consumption
+   can further be weighed with PSF and ST to better reflect their actual
+   contribution to carbon footprint.
+
+3.3.  Energy Metrics related to Paths
+
+   Energy metrics related to paths involve assessing the carbon
+   footprints of paths and optimizing those paths so that overall
+   footprint is minimized, then applying techniques such as path-aware
+   networking [I.D.draft-chunduri-rtgwg-preferred-path-routing] or
+   segment routing [RFC8402] to steer traffic along those paths that are
+   deemed "the greenest" among alternatives.  It also includes aspects
+   such as considering the incremental energy usage in routing
+   decisions, as has been suggested in proposals for energy-aware and
+   pollution-aware networking [Hossain2019].
+
+   Optimizing cost has a long tradition in networking; many of the
+   existing mechanisms can be leveraged for greener networking simply by
+   introducing energy footprint as a cost factor.  Low-hanging fruit
+   includes the inclusion of energy-related parameters as a cost
+   parameter in control planes, whether distributed (e.g.  IGP) or
+   conceptually centralized via SDN controllers.
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 11]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   In addition to power consumption over a path itself, other factors
+   such as paths involving intermediate routers that are powered by
+   renewable energy resources might be considered, as might be
+   determined by an aggregate sustainability score.  After all, paths
+   with devices that are powered by solar, wind, or geothermal might be
+   preferable over paths involving devices powered by conventional
+   energy that may include fossil fuel or nuclear resources.
+
+   The following are a corresponding set of candidate metrics:
+
+   *  Energy rating of a path.  (This could be computed as a function of
+      energy ratings of different hops along the path.)
+
+   *  Current power consumption across a path.  (This could be computed
+      by aggregating the current power per packet (or per kilo octet
+      etc) of each of the hops along the path.)
+
+   *  Incremental power for a packet over a path.  (This could be
+      computed by aggregating the incremental power per packet of each
+      of the hops along the path.)
+
+   Similar to some of the flow-related metrics, some caveats apply with
+   regards to challenges in capturing all contributors to carbon
+   footprint along a path.  Specifically, it may be challenging to
+   account for the contribution of systems at lower layers to the
+   metrics of the path.
+
+3.4.  Energy Metrics related to the Network-at-Large
+
+   Ultimately, the goal of energy optimization and reduction of carbon
+   footprint is to minimize the aggregate amount of energy used across
+   the entire network, as well as to minimize the overall carbon
+   footprint of the network as a whole.  Accordingly, metrics that
+   aggregate the energy usage across the network as a whole are needed.
+   In order to account for changing traffic profiles, growth in user
+   traffic etc, additional metrics are needed that normalize the total
+   over the volume of services supported and volume of traffic passed.
+   Corresponding metrics will generally be computed at the level of
+   Operational Support Systems (or Business Support Systems) for the
+   entire network.
+
+   Some of the metrics used include the following [telefonica2021]:
+
+   *  Total energy consumption (MWh)
+
+   *  Electricity from renewable sources (%)
+
+   *  Network energy efficiency (MWh/PB)
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 12]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+4.  Other considerations
+
+   This document is intended to spark discussion about what metrics will
+   be useful to reduce the carbon footprint of networks - that provide
+   visibility into energy consumption, that help optimization of
+   networks under green criteria, that enable the next generation of
+   energy-aware controllers and services.  Clearly, other metrics are
+   conceivable and more considerations apply beyond those that are
+   reflected in earlier sections of this document.  The following
+   subsections highlight some of those items.
+
+4.1.  User perspective
+
+   Arguably, attributing energy usage to individual users and making
+   users aware of the sustainability implications of their communication
+   behavior may provide interesting possibilities to reduce
+   environmental footprint by guiding their behavior accordingly.  For
+   example, the network could present clients with energy and carbon
+   statistics related to their communication usage.  This could be
+   supported by metrics related to service instances, such as energy
+   usage statistics beyond statistics regarding volume, duration, number
+   of transactions.  Such approaches would raise questions about how to
+   actually collect such statistics accurately (versus just computing
+   them via a formula) or what to actually include as part of those
+   statistics (amortized vs incremental energy contribution, attribution
+   of cost for path resilience or retransmissions due to congestion,
+   etc).  They also raise questions about how they would in practice be
+   used.  For example, energy-based charging might be explored as an
+   alternative for volume-based charging to incentivize carbon-conscious
+   networking use.  However, in practice the two may be strongly
+   correlated and rejected by customers for similar reasons that volume-
+   based charging is frequently rejected.
+
+4.2.  Holistic perspective
+
+   The network itself is only one contributor to a network's carbon
+   footprint.  Arguably just as important are aspects outside the
+   network itself, such as cooling and ventilation.  These aspects need
+   to be taken into account as part of a holistic perspective.  However,
+   reflecting such aspects in detail would arguably result in "boiling
+   the ocean" and are therefore not further addressed here.
+
+   That being said, clearly the carbon footprint and energy consumption
+   of a network as a whole will include non-negligible contributions of
+   devices beyond actively-managed networking equipment such as routers
+   or switches.  As a result, the sum of metrics contributed across all
+   networking equipment may not reflect the total of the network as a
+   whole.  In order to account for the contribution respectively carbon
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 13]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   overhead of those hidden devices, one straightforward way is to
+   introduce a metric that provides the ratio of the sum of the known
+   contributions of devices versus the contribution of the network as a
+   whole.  Such a metric can subsequently be factored in as an
+   additional "carbon tax" for other metrics where desired and
+   appropriate.
+
+4.3.  Sustainable equipment production
+
+   Internet energy consumption and associated carbon footprint may
+   comprise two major components [Raghavan2011]: (1) the energy of the
+   devices that construct the Internet, including the infrastructure
+   devices: routers, LAN devices, cellular and telecommunication
+   infrastructure, (2) More broadly, with the rise of peer-to-peer
+   applications and cloud services, it also considers the energy
+   consumption of the end systems, including desktops, laptops, smart
+   phones, cloud servers, and application servers that are not in the
+   cloud.
+
+   For those two components, the following factors need to take into
+   consideration for energy consumption calculation:
+
+   *  Energy consumed in manufacturing of the devices and end-systems,
+      as well as the contribution from their components and materials.
+      This constitutes the embodied carbon footprint of the device.  It
+      is conceivable to amortize embodied carbon footprint over the
+      lifetime of the device.
+
+   *  The replacement lifespan of the devices and end-systems: desktops
+      and laptops are typically replaced in 3-4 years, smartphones in 2
+      years, application servers and cloud servers in 3 years, routers
+      and WiFi-LAN switches in 3 years, cellular towers and
+      telecommunication switches in 10 years, fiber optics in 10 years,
+      copper in 30 years, etc.  With the incremental growth rate of the
+      technology advancement, the replacement lifespan might decrease
+      over time.
+
+   *  Operational maintenance: the network would not be functional
+      without various software and implementation of protocols.  The
+      energy consumed in creating software is complicated because it is
+      overwhelmingly human involved, which usually include the energy
+      used for the facilities of the software companies and human energy
+      of the programmers.
+
+   *  Replacement: The energy consumed in replacement of devices and
+      end-systems could vary.  Some could be very energy intensive for
+      those large devices, e.g., cellular towers, or environmental
+      unfriendly equipment, such as submarine communication cables.
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 14]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   *  Disposal: There is substantial energy cost in disposing and
+      recycling the old devices and equipment.
+
+   By combining the energy consumption for running each device that
+   builds the Internet [JuniperRouterPower], and the energy consumption
+   of the end systems, in the meantime counting the energy consumption
+   of manufacturing, operational maintenance, replacement and lifespan,
+   disposal of those devices and equipment, we may have an estimate of
+   the energy consumption for the network as a whole.
+
+4.4.  Dealing with imprecision and uncertainty
+
+   In some cases, it may be difficult to determine the values of metrics
+   precisely.  This may be due to, for example, limitations of
+   instrumentation and/or the fact that consumption of energy (for
+   example) is neither constant nor linear but adheres to more complex
+   functions.  In those cases, it may be advisable to allow for a way to
+   express metrics in ways that allow to reflect a degree of
+   uncertainty.  For example, power consumption can be addressed not as
+   a single value but as a range defined by an upper and lower bound, as
+   suggested e.g. in [Petrescu2010] for the expression of power
+   consumption of links.
+
+4.5.  Certification
+
+   Some of the metrics that are mentioned in this document may be
+   difficult to assess and verify in practice, such as sustainability
+   ratings or device power ratings.  As far as these metrics are used to
+   optimize the sustainability of network deployments, special
+   consideration needs to be given to ensure that those metrics are
+   indeed reflected correctly and accurately.  Decisions that are based
+   on incorrect assumptions and data may lead to ineffective or even
+   counterproductive courses of actions.  Where assessment and
+   specifically verification of certain metrics are difficult, solution
+   approaches that involve certification of those metrics (for example,
+   of sustainability ratings) by a trusted authority could be
+   considered.
+
+5.  IANA Considerations
+
+   This document does not have any IANA requests.
+
+
+
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 15]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+6.  Security Considerations
+
+   When instrumenting a network for energy metrics, it is important that
+   implementations are secured to ensure that data is accurately
+   measured and cannot be tampered with.  For example, an attacker might
+   try to tamper energy readings to confuse controller trying to minize
+   power consumption, leading to increased power consumption instead.
+   In addition, access to the data needs to be secured in similar ways
+   as for other sensitive management data, for example using secure
+   management protocols and subjecting energy data that is maintained in
+   YANG datastores via NACM (NETCONF Access Control Model).
+
+   However, it should be noted that this draft specifies only metrics
+   themselves, not how to instrument networks accordingly.  For the
+   definition of metrics themselves, security considerations do thus not
+   really apply.
+
+7.  Acknowledgments
+
+   We would like to thank the following persons for reviews and super-
+   helpful feedback on earlier versions of the document: Eve Schooler,
+   Michael Welzl, Alexandru Petrescu.
+
+8.  Informative References
+
+   [Ahn2014]  Ahn, J. and H. S. Park, "Measurement and modeling the
+              power consumption of router interface",
+              DOI: 10.1109/ICACT.2014.6779082, 16th International
+              Conference on Advanced Communication Technology, pp.
+              860-863, 2014,
+              <https://ieeexplore.ieee.org/document/6779082>.
+
+   [ATIS0600015.02]
+              AITS, "Energy Efficiency for Telecommunication Equipment:
+              Methodology for Measurement and Reporting - Transport and
+              Optical Access Requirements", March 2016.
+
+   [Bolla2011]
+              Bolla, R., Bruschi, R., Lombardo, C., and D. Suino,
+              "Evaluating the energy-awareness of future Internet
+              devices", DOI: 10.1109/HPSR.2011.5986001, 2011 IEEE 12th
+              International Conference on High Performance Switching and
+              Routing, pp. 36-43, 2011,
+              <https://ieeexplore.ieee.org/document/5986001>.
+
+   [Energystar]
+              EnergyStar, "12 Ways to Save Energy in the Data Center,
+              Server Virtualization", 2022,
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 16]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+              <https://www.energystar.gov/products/
+              low_carbon_it_campaign/12_ways_save_energy_data_center/
+              server_virtualization>.
+
+   [Hossain2019]
+              Hossain, M., Georges, J., Rondeau, E., and T. Divoux,
+              "Energy, Carbon and Renewable Energy: Candidate Metrics
+              for Green-Aware Routing?", DOI: 10.3390/s19132901,
+              Sensors Vol. 19 No. 3, June 2019,
+              <https://ieeexplore.ieee.org/document/6779082>.
+
+   [I.D.draft-chunduri-rtgwg-preferred-path-routing]
+              Bryant, S. E., Chunduri, U., and A. Clemm, "Preferred Path
+              Routing Framework", May 2022,
+              <https://datatracker.ietf.org/doc/html/draft-chunduri-
+              rtgwg-preferred-path-routing-01>.
+
+   [I.D.draft-cwx-green-ps]
+              Clemm, A. and C. Westphal, "Challenges and Opportunities
+              in Green Networking", June 2022.
+
+   [I.D.draft-manral-bmwg-power-usage]
+              Manral, V., "Benchmarking Power usage of networking
+              devices", January 2011.
+
+   [JuniperRouterPower]
+              Juniper, "Power Requirements for an MX960 Router", 2021.
+
+   [Petrescu2010]
+              Petrescu, A., Janneteau, C., Olivereau, A., and M. Kellil,
+              "Energy Metric for IPv6 Links",
+              DOI: 10.13140/RG.2.1.4665.5209, March 2010,
+              <http://dx.doi.org/10.13140/RG.2.1.4665.5209>.
+
+   [Raghavan2011]
+              Raghavan, B. and J. Ma, "The energy and emergy of the
+              Internet", HotNets-X: Proceedings of the 10th ACM Workshop
+              on Hot Topics in Networks, pp. 1-6, 2011,
+              <https://dl.acm.org/doi/10.1145/2070562.2070571>.
+
+   [RFC6988]  Quittek, J., Chandramouli, M., Winter, R., Dietz, T., and
+              B. Claise, "Requirements for Energy Management", RFC 6988,
+              September 2013,
+              <https://datatracker.ietf.org/doc/html/rfc6988>.
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 17]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   [RFC7011]  (Ed.), B. C., (Ed.), B. T., and P. Aitken, "Specification
+              of the IP Flow Information Export (IPFIX) Protocol for the
+              Exchange of Flow Information", RFC 7011, September 2013,
+              <https://datatracker.ietf.org/doc/html/rfc7011>.
+
+   [RFC7012]  (Ed.), B. C. and B. T. (Ed.), "Information Model for IP
+              Flow Information Export (IPFIX)", RFC 7012, September
+              2013, <https://datatracker.ietf.org/doc/html/rfc7012>.
+
+   [RFC7460]  Chandramouli, M., Claise, B., Schoening, B., Quittek, J.,
+              and T. Dietz, "Monitoring and Control MIB for Power and
+              Energy", RFC 7460, March 2015,
+              <https://datatracker.ietf.org/doc/html/rfc7460>.
+
+   [RFC7950]  Bjorklund, M. E., "The YANG 1.1 Data Modeling Language",
+              RFC 7950, August 2016,
+              <https://datatracker.ietf.org/doc/html/rfc7950>.
+
+   [RFC8402]  (Ed.), C. F., (Ed.), S. P., Ginsberg, L., Decraene, B.,
+              Decraene, B., Litkowski, S., and R. Shakir, "Segment
+              Routing Architecture", RFC 8402, July 2018,
+              <https://datatracker.ietf.org/doc/html/rfc8402>.
+
+   [RFC8655]  Finn, N., Thubert, P., Varga, B., and J. Farkas,
+              "Deterministic Networking Architecture", RFC 8655, October
+              2019, <https://datatracker.ietf.org/doc/html/rfc8655>.
+
+   [telefonica2021]
+              Telefonica, "Telefonica Consolidated Annual Report 2021.",
+              2021.
+
+   [vmWare2022]
+              vmWare, "Definition for Metrics, Properties, and Alerts -
+              vRealize Operations 8.6 (pp.308ff)", May 2022,
+              <https://docs.vmware.com/en/vRealize-Operations/8.6/
+              vrealize-operations-86-reference-guide.pdf>.
+
+Authors' Addresses
+
+   Alexander Clemm
+   Futurewei
+   2220 Central Expressway
+   Santa Clara,  CA 95050
+   United States of America
+   Email: ludwig@clemm.org
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 18]
+
+Internet-Draft          Green Networking Metrics              March 2023
+
+
+   Lijun Dong
+   Futurewei
+   2220 Central Expressway
+   Santa Clara,  CA 95050
+   United States of America
+   Email: lijun.dong@futurewei.com
+
+
+   Greg Mirsky
+   Ericsson
+   Email: gregimirsky@gmail.com
+
+
+   Laurent Ciavaglia
+   Nokia
+   Email: laurent.ciavaglia@nokia.com
+
+
+   Jeff Tantsura
+   Microsoft
+   Email: jefftant.ietf@gmail.com
+
+
+   Marie-Paule Odini
+   Email: mp.odini@orange.fr
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Clemm, et al.           Expires 9 September 2023               [Page 19]
