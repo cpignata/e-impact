@@ -1,5 +1,5 @@
 # e-impact
-#### Environmental Impact of Internet Architectures and Technologies
+### Environmental Impact of Internet Architectures and Technologies
 
 #### Mailing List
 * [e-impact List Info](https://www.ietf.org/mailman/listinfo/e-impact)
