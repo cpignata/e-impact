@@ -22,3 +22,7 @@
 * [Slides and Material](ietf117/materials/README.md)
 * [Internet-Drafts](ietf117/ids/)
 
+## IETF 118
+* [Agenda](ietf118/Agenda.md)
+
+
