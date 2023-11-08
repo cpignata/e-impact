@@ -23,6 +23,8 @@
 * [Internet-Drafts](ietf117/ids/)
 
 ## IETF 118
+* [Datatracker](https://datatracker.ietf.org/meeting/118/materials/#iab)
 * [Agenda](ietf118/Agenda.md)
+* [Slides](ietf118/materials/README.md)
 
 
